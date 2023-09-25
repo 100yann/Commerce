@@ -1,0 +1,54 @@
+body {
+    padding: 10px;
+}
+
+
+.form-group {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-item {
+    flex: 1;
+}
+
+.margin-left {
+    margin-left: 20px;
+}
+
+
+#create-listing-heading{
+    margin: 25px 0;
+    text-align: center;
+}
+
+label{
+    font-size: larger;
+}
+
+ 
+.form-control {
+    margin-bottom: 20px;
+}
+
+#create-listing-button{
+    width: 10%;
+    padding: 5px 0;
+    margin: 15px auto 0;
+    font-size: 18px;
+    display: block;
+}
