@@ -3,13 +3,36 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from .models import User, Listing, ListingDetails
+from django.forms import ModelForm
 from django import forms
 
-from .models import User
+
+class NewListing(ModelForm):
+    class Meta:
+        model = Listing
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class NewListingDetails(ModelForm):
+    class Meta:
+        model = ListingDetails
+        exclude = ('listing',)
+        widgets = {
+            'descr': forms.Textarea(attrs={'class': 'form-control'}),
+            'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'img': forms.URLInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings_details = ListingDetails.objects.select_related('listing').all()
+    return render(request, "auctions/index.html", {
+        'listings': listings_details
+    })
 
 
 def login_view(request):
@@ -64,43 +87,20 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-categories = (
-    (0, ''),
-    (1, 'Fashion'),
-    (2, 'Home'),
-    (3, 'Toys'),
-    (4, 'Electronics')
-)
-
-class NewForm(forms.Form):
-    title = forms.CharField(required=True)    
-    descr = forms.CharField(required=True)
-    starting_bid = forms.IntegerField(required=True)
-    image = forms.URLField(required=False)
-    category = forms.ChoiceField(choices=(categories))
-
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
-
-
 def create_listing(request):
     if request.method == 'POST':
-        form = NewForm(request.POST)
-        if form.is_valid():
-            clean_data = form.cleaned_data
-            print(clean_data)
-            field_data = {}
-            field_names = ['title', 'descr', 'starting_bid', 'image', 'category']
-            
-            for name in field_names:
-                field_data[name] = clean_data[name]
-            field_data['category'] = categories[int(field_data['category'])][1]
+        form1 = NewListing(request.POST)
+        form2 = NewListingDetails(request.POST)
+        if form1.is_valid() and form2.is_valid():
+            listing_instance = form1.save()
 
+            listing_details_instance = form2.save(commit=False)
+            listing_details_instance.listing = listing_instance
+            listing_details_instance.save()
+
+            return HttpResponseRedirect(reverse("index"))
     return render(request, "auctions/create_listing.html", {
-        'form': NewForm
+        'form1': NewListing,
+        'form2': NewListingDetails
     })
     
