@@ -6,6 +6,8 @@ from django.urls import reverse
 from .models import User, Listing, ListingDetails
 from django.forms import ModelForm
 from django import forms
+from django.forms.models import model_to_dict
+
 
 
 class NewListing(ModelForm):
@@ -104,3 +106,14 @@ def create_listing(request):
         'form2': NewListingDetails
     })
     
+
+def view_listing(request, id, title):
+    get_listing = Listing.objects.get(pk=id)
+    get_listing_details = ListingDetails.objects.get(listing=id)
+    to_dict = model_to_dict(get_listing_details)
+    context = {
+        'title': get_listing,
+        'details': to_dict
+    }
+
+    return render(request, "auctions/view_listing.html", context)
