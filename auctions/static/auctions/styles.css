@@ -51,3 +51,49 @@ label{
     font-size: 18px;
     display: block;
 }
+
+/* Index Page */
+/* Index Page */
+/* Index Page */
+
+.container{
+    max-width: 90%;
+    margin: auto;
+}
+
+.flex-listing{
+    display: flex;
+    flex-wrap: wrap;
+}
+.listing {
+    flex-basis: 24%;
+    height: 320px;
+    border: 1px grey solid;
+    border-radius: 25px;
+    margin: 10px 5px;
+    padding: 10px;
+}
+
+@media (max-width: 1300px){
+    .listing{
+        flex-basis: 33%;
+    }
+}
+
+@media (max-width: 860px){
+    .listing{
+        flex-basis: 50%;
+    }
+}
+
+@media (max-width: 600px){
+    .listing{
+        flex-basis: 100%;
+    }
+}
+.listing > img {
+    border-radius: 15px;
+    width: 100%;
+    height: 75%;
+    margin-bottom: 10px;
+}

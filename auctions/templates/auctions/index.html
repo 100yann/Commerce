@@ -1,9 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <div class="container">
+        <h2>Active Listings</h2>
+        <div class="flex-listing">
+            {% for listing_details in listings %}
+                <div class="listing">
+                    {% if listing_details.img %}
+                        <img src="{{ listing_details.img }}" alt="listing_photo">
+                    {% endif %}
+                    <h6>{{ listing_details.listing.title }}</h6>
+                    ${{ listing_details.starting_bid }}
+                </div>
+            {% endfor %}
+        </div>
 
-    {% for listing_details in listings %}
-        <li>{{ listing_details.listing.title }}: {{ listing_details.descr }}, ${{ listing_details.starting_bid }}</li>
-    {% endfor %}
+
+    </div>
+
 {% endblock %}
