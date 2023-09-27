@@ -9,6 +9,9 @@ class User(AbstractUser):
 class Listing(models.Model):
     title = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.title
+
 
 class ListingDetails(models.Model):
     CATEGORY_CHOICES = [
@@ -25,3 +28,6 @@ class ListingDetails(models.Model):
     img = models.URLField(blank=True)
     category = models.CharField(max_length=50, blank=True, choices=CATEGORY_CHOICES)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.descr}, {self.starting_bid}, {self.img}, {self.category}'
