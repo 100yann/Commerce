@@ -101,6 +101,8 @@ def create_listing(request):
             listing_details_instance.save()
 
             return HttpResponseRedirect(reverse("index"))
+        else:
+            print(form1.errors, form2.errors)
     return render(request, "auctions/create_listing.html", {
         'form1': NewListing,
         'form2': NewListingDetails
