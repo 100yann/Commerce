@@ -110,10 +110,9 @@ def create_listing(request):
 def view_listing(request, id, title):
     get_listing = Listing.objects.get(pk=id)
     get_listing_details = ListingDetails.objects.get(listing=id)
-    to_dict = model_to_dict(get_listing_details)
     context = {
         'title': get_listing,
-        'details': to_dict
+        'details': get_listing_details
     }
 
     return render(request, "auctions/view_listing.html", context)
