@@ -11,10 +11,11 @@
         <div class="listing-column-text">
             <h1>{{ title }}</h1>
             <p>{{ details.descr }}</p>
-            <h2>${{ details.starting_bid }}</h2>
-            <p>X bids so far.</p>
-            <form action="" method="POST">
-                <input type="text" class="form-control" placeholder="Bid">
+            <h2>${{ bids.highest_bid }}</h2>
+            <p>{{ bids.num_of_bids }} bid(s) so far.</p>
+            <form action="{% url 'view' id=details.listing.id title=title %}" method="POST">
+                {% csrf_token %}
+                <input type="number" class="form-control" placeholder="Bid" name="new_bid">
                 <input type="submit" class="btn btn-primary" value="Place Bid">
             </form>
             <p>Posted on {{ details.date_added }}</p>

@@ -6,8 +6,7 @@
         <div class="flex-listing">
             {% for listing_details in listings %}
                 <div class="listing">
-                    <a href="{% url 'view' id=listing_details.id title=listing_details.listing.title %}">
-
+                    <a href="{% url 'view' id=listing_details.listing.id title=listing_details.listing.title %}">
                     {% if listing_details.img %}
                         <img src="{{ listing_details.img }}" alt="listing_photo">
                     {% endif %}

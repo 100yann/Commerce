@@ -12,7 +12,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.title
+        return f'{self.id}, {self.title}'
 
 
 class ListingDetails(models.Model):
@@ -34,7 +34,7 @@ class ListingDetails(models.Model):
 
 
     def __str__(self):
-        return f'{self.descr}, {self.starting_bid}, {self.img}, {self.category}'
+        return f'{self.listing},{self.descr}, {self.starting_bid}, {self.img}, {self.category}'
     
 
     def save(self, *args, **kwargs):
@@ -46,6 +46,7 @@ class Bids(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     highest_bid = models.PositiveIntegerField()
     bidder = models.CharField(max_length=100)
+    num_of_bids = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'{self.highest_bid}, {self.bidder}'
+        return f'{self.listing}, {self.bidder}, {self.highest_bid}, {self.num_of_bids}'

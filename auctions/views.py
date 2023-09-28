@@ -3,10 +3,11 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User, Listing, ListingDetails
+from .models import User, Listing, ListingDetails, Bids
 from django.forms import ModelForm
 from django import forms
-from django.forms.models import model_to_dict
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -88,7 +89,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-
+@login_required
 def create_listing(request):
     if request.method == 'POST':
         form1 = NewListing(request.POST)
@@ -100,6 +101,13 @@ def create_listing(request):
             listing_details_instance.listing = listing_instance
             listing_details_instance.save()
 
+            bid_instance = Bids()
+            bid_instance.listing = listing_instance
+            bid_instance.bidder = request.user.username
+            bid_instance.highest_bid = form2.cleaned_data['starting_bid']
+            bid_instance.num_of_bids = 0
+            bid_instance.save()
+            
             return HttpResponseRedirect(reverse("index"))
         else:
             print(form1.errors, form2.errors)
@@ -110,11 +118,23 @@ def create_listing(request):
     
 
 def view_listing(request, id, title):
-    get_listing = Listing.objects.get(pk=id)
     get_listing_details = ListingDetails.objects.get(listing=id)
+    get_bid = Bids.objects.get(listing=id)
+
+    if request.method == "POST":
+        new_bid = int(request.POST.get('new_bid'))
+        if new_bid > get_bid.highest_bid:
+            get_bid.highest_bid = new_bid
+            get_bid.num_of_bids += 1
+            get_bid.bidder = request.user.username
+            get_bid.save()
+
+
+
     context = {
-        'title': get_listing,
-        'details': get_listing_details
+        'title': title,
+        'details': get_listing_details,
+        'bids': get_bid
     }
 
     return render(request, "auctions/view_listing.html", context)
