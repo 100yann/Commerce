@@ -33,8 +33,10 @@ class NewListingDetails(ModelForm):
 
 def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
+    all_bids = Bids.objects.select_related('listing').all()
     return render(request, "auctions/index.html", {
-        'listings': listings_details
+        'listings': listings_details,
+        'all_bids': all_bids
     })
 
 

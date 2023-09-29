@@ -3,21 +3,24 @@
 {% block body %}
     <div class="container">
         <h2>Active Listings</h2>
-        <div class="flex-listing">
             {% for listing_details in listings %}
-                <div class="listing">
                     <a href="{% url 'view' id=listing_details.listing.id title=listing_details.listing.title %}">
-                    {% if listing_details.img %}
-                        <img src="{{ listing_details.img }}" alt="listing_photo">
-                    {% endif %}
-                    <h6>{{ listing_details.listing.title }}</h6>
-                    ${{ listing_details.starting_bid }}
+                        <div class="listing">
+                            <div class="listing-left">
+                            {% if listing_details.img %}
+                                <img src="{{ listing_details.img }}" alt="listing_photo">
+                            {% endif %}
+                            </div>
+                            <div class="listing-right">
+                                <h4>{{ listing_details.listing.title }}</h4>
+                                <h5>Price: ${{ listing_details.starting_bid }}</h5>
+                                <p>{{ listing_details.descr }}</p>
+                                <p>Created on {{ listing_details.date_added }}</p>
+                                <p>{{ listing_details.category }}</p>
+                            </div>
+                        </div>
                     </a>
-                </div>
+
             {% endfor %}
-        </div>
-
-
     </div>
-
 {% endblock %}
