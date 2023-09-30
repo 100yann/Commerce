@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 class NewListing(ModelForm):
     class Meta:
         model = Listing
-        exclude = ('added_by',)
+        exclude = ('added_by', 'active',)
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -129,6 +129,8 @@ def view_listing(request, listing_id, title):
     get_bid = Bids.objects.get(listing=listing_id)
     current_user = User.objects.get(pk=request.user.id)
     watchlist = current_user in listing.watchlist.all()
+    print(listing)
+
     if request.method == "POST":
         if request.POST.get('save-bid') and request.POST.get('new_bid') != '':        
             new_bid = int(request.POST.get('new_bid'))
@@ -146,7 +148,10 @@ def view_listing(request, listing_id, title):
                 listing.watchlist.add(current_user)
                 watchlist = True
             listing.save()
-            
+        elif request.POST.get('close'):
+            listing.active = False
+            listing.save()
+            print(listing)
 
     context = {
         'title': listing,

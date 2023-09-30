@@ -12,9 +12,9 @@
             <h1>{{ title.title }}</h1>
             <p>{{ details.descr }}</p>
             <h2>${{ bids.highest_bid }}</h2>
-            <p>{{ bids.num_of_bids }} bid(s) so far.</p>
 
-            {% if user != title.added_by %}
+            {% if user != title.added_by and listing.active %}
+                <p>{{ bids.num_of_bids }} bid(s) so far.</p>
                 <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                     {% csrf_token %}
                     <input type="number" class="form-control" placeholder="Bid" name="new_bid">
@@ -25,10 +25,23 @@
                         <input type="submit" name='save-watchlist' class="btn btn-primary" value="Remove From Watchlist">
                     {% endif %}
                 </form>
+            {% elif user != title.added_by and not listing.active %}
+                <p>Listing Closed.</p>
+                <p>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</p>
             {% endif %}
             <p>Posted on {{ details.date_added }}</p>
             {% if user != title.added_by %}
                 <p>By {{ title.added_by }}</p>
+            {% else %}
+                <p>{{ bids.num_of_bids }} bid(s) so far.</p>
+                {% if listing.active %}
+                    <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" name="close" class="btn btn-primary" value="Close Listing">
+                    </form>
+                {% else %}
+                    <button class="btn btn-dark" disabled>Listing Closed</button>
+                {% endif %}
             {% endif %}
         </div>
     </div>
