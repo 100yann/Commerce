@@ -7,6 +7,8 @@ from .models import User, Listing, ListingDetails, Bids
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
 
 
 
@@ -34,6 +36,7 @@ class NewListingDetails(ModelForm):
 def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
     all_bids = Bids.objects.select_related('listing').all()
+    print(all_bids)
     return render(request, "auctions/index.html", {
         'listings': listings_details,
         'all_bids': all_bids
@@ -104,6 +107,8 @@ def create_listing(request):
 
             listing_details_instance = form2.save(commit=False)
             listing_details_instance.listing = listing_instance
+            if listing_details_instance.img == '':
+                listing_details_instance.img = settings.STATIC_URL + '/images/default.jpg'
             listing_details_instance.save()
 
             bid_instance = Bids()
