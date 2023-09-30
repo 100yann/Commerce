@@ -9,17 +9,27 @@
             {% endif %}
         </div>
         <div class="listing-column-text">
-            <h1>{{ title }}</h1>
+            <h1>{{ title.title }}</h1>
             <p>{{ details.descr }}</p>
             <h2>${{ bids.highest_bid }}</h2>
             <p>{{ bids.num_of_bids }} bid(s) so far.</p>
-            <form action="{% url 'view' id=details.listing.id title=title %}" method="POST">
-                {% csrf_token %}
-                <input type="number" class="form-control" placeholder="Bid" name="new_bid">
-                <input type="submit" class="btn btn-primary" value="Place Bid">
-            </form>
+
+            {% if user != title.added_by %}
+                <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+                    {% csrf_token %}
+                    <input type="number" class="form-control" placeholder="Bid" name="new_bid">
+                    <input type="submit" name='save-bid' class="btn btn-primary" value="Place Bid">
+                    {% if not watchlist %}
+                        <input type="submit" name='save-watchlist' class="btn btn-primary" value="Add To Watchlist">
+                    {% else %}
+                        <input type="submit" name='save-watchlist' class="btn btn-primary" value="Remove From Watchlist">
+                    {% endif %}
+                </form>
+            {% endif %}
             <p>Posted on {{ details.date_added }}</p>
-            <p>By</p>
+            {% if user != title.added_by %}
+                <p>By {{ title.added_by }}</p>
+            {% endif %}
         </div>
     </div>
 </div>

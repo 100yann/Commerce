@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 class NewListing(ModelForm):
     class Meta:
         model = Listing
-        fields = '__all__'
+        exclude = ('added_by',)
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -97,7 +97,10 @@ def create_listing(request):
         form1 = NewListing(request.POST)
         form2 = NewListingDetails(request.POST)
         if form1.is_valid() and form2.is_valid():
-            listing_instance = form1.save()
+            listing_instance = form1.save(commit=False)
+            user = request.user.id
+            listing_instance.added_by = User.objects.get(id=user)
+            listing_instance.save()
 
             listing_details_instance = form2.save(commit=False)
             listing_details_instance.listing = listing_instance
@@ -118,25 +121,48 @@ def create_listing(request):
         'form2': NewListingDetails
     })
     
-
-def view_listing(request, id, title):
-    get_listing_details = ListingDetails.objects.get(listing=id)
-    get_bid = Bids.objects.get(listing=id)
-
+    
+@login_required
+def view_listing(request, listing_id, title):
+    listing = Listing.objects.get(id=listing_id)
+    get_listing_details = ListingDetails.objects.get(listing=listing_id)
+    get_bid = Bids.objects.get(listing=listing_id)
+    current_user = User.objects.get(pk=request.user.id)
+    watchlist = current_user in listing.watchlist.all()
     if request.method == "POST":
-        new_bid = int(request.POST.get('new_bid'))
-        if new_bid > get_bid.highest_bid:
-            get_bid.highest_bid = new_bid
-            get_bid.num_of_bids += 1
-            get_bid.bidder = request.user.username
-            get_bid.save()
-
-
+        if request.POST.get('save-bid') and request.POST.get('new_bid') != '':        
+            new_bid = int(request.POST.get('new_bid'))
+            if new_bid > get_bid.highest_bid:
+                get_bid.highest_bid = new_bid
+                get_bid.num_of_bids += 1
+                user = request.user.username
+                get_bid.bidder = user
+                get_bid.save()
+        elif request.POST.get('save-watchlist'):
+            if watchlist == True:
+                listing.watchlist.remove(current_user)
+                watchlist = False
+            else:
+                listing.watchlist.add(current_user)
+                watchlist = True
+            listing.save()
+            
 
     context = {
-        'title': title,
+        'title': listing,
         'details': get_listing_details,
-        'bids': get_bid
-    }
+        'bids': get_bid,
+        'watchlist': watchlist
+        
+        }
 
     return render(request, "auctions/view_listing.html", context)
+
+@login_required
+def watchlist(request):
+    watched_listings = Listing.objects.filter(watchlist=request.user.id)
+    all_listings = ListingDetails.objects.filter(listing__in=watched_listings)
+    context = {
+        'listings': all_listings
+    }
+    return render(request, 'auctions/watchlist.html', context)
