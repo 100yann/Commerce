@@ -36,7 +36,6 @@ class NewListingDetails(ModelForm):
 def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
     all_bids = Bids.objects.select_related('listing').all()
-    print(all_bids)
     return render(request, "auctions/index.html", {
         'listings': listings_details,
         'all_bids': all_bids
@@ -134,7 +133,6 @@ def view_listing(request, listing_id, title):
     get_bid = Bids.objects.get(listing=listing_id)
     current_user = User.objects.get(pk=request.user.id)
     watchlist = current_user in listing.watchlist.all()
-    print(listing)
 
     if request.method == "POST":
         if request.POST.get('save-bid') and request.POST.get('new_bid') != '':        
@@ -156,14 +154,12 @@ def view_listing(request, listing_id, title):
         elif request.POST.get('close'):
             listing.active = False
             listing.save()
-            print(listing)
 
     context = {
         'title': listing,
         'details': get_listing_details,
         'bids': get_bid,
-        'watchlist': watchlist
-        
+        'watchlist': watchlist 
         }
 
     return render(request, "auctions/view_listing.html", context)
@@ -176,3 +172,26 @@ def watchlist(request):
         'listings': all_listings
     }
     return render(request, 'auctions/watchlist.html', context)
+
+@login_required
+def categories(request, category):
+    categories = ListingDetails.CATEGORY_CHOICES
+    curr_category = 'All'
+    for i in categories:
+        if i[1] == category.title():
+            curr_category = i[1]
+            index = i[0]
+            listing_details = ListingDetails.objects.filter(category=index)
+            all_bids = Bids.objects.filter(listing__listingdetails__category=index)
+            break
+    if curr_category == 'All':
+        listing_details = ListingDetails.objects.select_related('listing').all()
+        all_bids = Bids.objects.select_related('listing').all()
+    objects_list = list(zip(listing_details, all_bids))
+
+    return render(request, 'auctions/categories.html', {
+        'categories': categories,
+        'listings': objects_list,
+        'curr_category': curr_category
+
+    })

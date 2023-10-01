@@ -33,7 +33,7 @@ class ListingDetails(models.Model):
     img = models.URLField(blank=True)
     category = models.CharField(max_length=50, blank=True, choices=CATEGORY_CHOICES)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    date_added = models.DateField(blank=True)
+    date_added = models.DateField(blank=True)   
 
 
     def __str__(self):

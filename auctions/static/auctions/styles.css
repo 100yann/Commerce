@@ -107,3 +107,28 @@ label{
     margin-top: 20px;   
     font-size: 18px;
 }
+
+
+/* Categories */
+/* Categories */
+/* Categories */
+
+.bar {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    margin: auto;
+    justify-content:space-between;
+    text-align: center;
+}
+.bar > .item {
+    flex: 1;
+    border: 1px grey solid;
+    font-size: 22px;
+    padding: 10px;
+}
+@media (max-width: 650px){
+    .bar >  .item {
+        font-size: 17px;
+    }
+}

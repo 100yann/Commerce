@@ -12,6 +12,7 @@
             <h1>{{ title.title }}</h1>
             <p>{{ details.descr }}</p>
             <h2>${{ bids.highest_bid }}</h2>
+            <p>{{ details.get_category_display }}</p>
 
             {% if user != title.added_by and title.active %}
                 <p>{{ bids.num_of_bids }} bid(s) so far.</p>
@@ -27,14 +28,18 @@
                 </form>
             {% elif not title.active %}
                 <p>Listing Closed.</p>
-                <p>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</p>
+                {% if user == title.added_by and bids.num_of_bids == 0 %}
+                    <p>The listing was closed with no bids.</p>
+                {% else %}
+                    <p>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</p>
+                {% endif %}
             {% endif %}
             <p>Posted on {{ details.date_added }}</p>
             {% if user != title.added_by %}
                 <p>By {{ title.added_by }}</p>
             {% else %}
-                <p>{{ bids.num_of_bids }} bid(s) so far.</p>
                 {% if title.active %}
+                    <p>{{ bids.num_of_bids }} bid(s) so far.</p>
                     <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" name="close" class="btn btn-primary" value="Close Listing">
