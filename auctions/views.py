@@ -36,9 +36,9 @@ class NewListingDetails(ModelForm):
 def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
     all_bids = Bids.objects.select_related('listing').all()
+    all_listings = list(zip(listings_details, all_bids))
     return render(request, "auctions/index.html", {
-        'listings': listings_details,
-        'all_bids': all_bids
+        'all_listings': all_listings
     })
 
 
@@ -167,9 +167,11 @@ def view_listing(request, listing_id, title):
 @login_required
 def watchlist(request):
     watched_listings = Listing.objects.filter(watchlist=request.user.id)
-    all_listings = ListingDetails.objects.filter(listing__in=watched_listings)
+    listing_details = ListingDetails.objects.filter(listing__in=watched_listings)
+    bids = Bids.objects.filter(listing__in=watched_listings)
+    all_listings = list(zip(listing_details, bids))
     context = {
-        'listings': all_listings
+        'all_listings': all_listings
     }
     return render(request, 'auctions/watchlist.html', context)
 
@@ -191,7 +193,7 @@ def categories(request, category):
 
     return render(request, 'auctions/categories.html', {
         'categories': categories,
-        'listings': objects_list,
+        'all_listings': objects_list,
         'curr_category': curr_category
 
     })
