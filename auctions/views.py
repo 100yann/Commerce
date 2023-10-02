@@ -36,7 +36,7 @@ class NewListingDetails(ModelForm):
 def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
     all_bids = Bids.objects.select_related('listing').all()
-    all_listings = list(zip(listings_details, all_bids))
+    all_listings = zip(listings_details, all_bids)
     return render(request, "auctions/index.html", {
         'all_listings': all_listings
     })
@@ -117,7 +117,7 @@ def create_listing(request):
             bid_instance.num_of_bids = 0
             bid_instance.save()
             
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(f'view/{listing_instance.id}/{listing_instance.title}')
         else:
             print(form1.errors, form2.errors)
     return render(request, "auctions/create_listing.html", {
@@ -154,7 +154,7 @@ def view_listing(request, listing_id, title):
         elif request.POST.get('close'):
             listing.active = False
             listing.save()
-
+            
     context = {
         'title': listing,
         'details': get_listing_details,
@@ -169,7 +169,7 @@ def watchlist(request):
     watched_listings = Listing.objects.filter(watchlist=request.user.id)
     listing_details = ListingDetails.objects.filter(listing__in=watched_listings)
     bids = Bids.objects.filter(listing__in=watched_listings)
-    all_listings = list(zip(listing_details, bids))
+    all_listings = zip(listing_details, bids)
     context = {
         'all_listings': all_listings
     }
@@ -189,11 +189,11 @@ def categories(request, category):
     if curr_category == 'All':
         listing_details = ListingDetails.objects.select_related('listing').all()
         all_bids = Bids.objects.select_related('listing').all()
-    objects_list = list(zip(listing_details, all_bids))
+    all_listings = zip(listing_details, all_bids)
 
     return render(request, 'auctions/categories.html', {
         'categories': categories,
-        'all_listings': objects_list,
+        'all_listings': all_listings,
         'curr_category': curr_category
 
     })

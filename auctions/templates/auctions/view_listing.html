@@ -15,7 +15,11 @@
             <p>{{ details.get_category_display }}</p>
 
             {% if user != title.added_by and title.active %}
-                <p>{{ bids.num_of_bids }} bid(s) so far.</p>
+                {% if user.username == bids.bidder %}
+                    <p>Yours is the highest bid! {{ bids.num_of_bids }} bid(s) so far.</p>
+                {% else %}
+                    <p>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</p>
+                {% endif %}
                 <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                     {% csrf_token %}
                     <input type="number" class="form-control" placeholder="Bid" name="new_bid">
@@ -39,7 +43,6 @@
                 <p>By {{ title.added_by }}</p>
             {% else %}
                 {% if title.active %}
-                    <p>{{ bids.num_of_bids }} bid(s) so far.</p>
                     <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" name="close" class="btn btn-primary" value="Close Listing">

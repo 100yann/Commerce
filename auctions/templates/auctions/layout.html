@@ -49,23 +49,23 @@
         {% endblock %}
         {% if all_listings %}
             <div class="container">
-                {% for listing_details in all_listings %}
-                    <a href="{% url 'view' listing_id=listing_details.0.listing.id title=listing_details.0.listing.title %}">
+                {% for listing, bid in all_listings %}
+                    <a href="{% url 'view' listing_id=listing.listing.id title=listing.listing.title %}">
                         <div class="listing">
                             <div class="listing-left">
-                            {% if listing_details.0.img %}
-                                <img src="{{ listing_details.0.img }}" alt="listing_photo">
+                            {% if listing.img %}
+                                <img src="{{ listing.img }}" alt="listing_photo">
                             {% endif %}
                             </div>
                             <div class="listing-right">
-                                <h4>{{ listing_details.0.listing.title }}</h4>
-                                <h5>Price: ${{ listing_details.1.highest_bid }}</h5>
-                                <p>{{ listing_details.0.descr }}</p>
+                                <h4>{{ listing.listing.title }}</h4>
+                                <h5>Price: ${{ bid.highest_bid }}</h5>
+                                <p>{{ listing.descr }}</p>
 
-                                {% if listing_details.0.get_category_display != '' %}
-                                    <p>Created on {{ listing_details.0.date_added }} |  Category: {{ listing_details.0.get_category_display }}</p>
+                                {% if listing.get_category_display != '' %}
+                                    <p>Created on {{ listing.date_added }} |  Category: {{ listing.get_category_display }}</p>
                                 {% else %}
-                                    <p>Created on {{ listing_details.0.date_added }}
+                                    <p>Created on {{ listing.date_added }}
                                 {% endif %}
                             </div>
                         </div>
