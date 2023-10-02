@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container" id="create-listing-div">
+    <div class="container-create-listing">
         <h2 id="create-listing-heading">Create a new listing</h2>
         <form action="{% url 'create' %}" method="POST">
             {% csrf_token %} 

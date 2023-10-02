@@ -3,13 +3,35 @@ body {
 }
 
 
+/* LAYOUT */
+/* LAYOUT */
+/* LAYOUT */
+.navbar-brand {
+    font-weight:bold;
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px 0;
+}
+
+hr {
+    margin: 0 0 25px;
+}
+.navbar-left, .navbar-right {
+    font-size: 17px;
+    display: flex;
+    margin-bottom: 0;
+}
+
+/* CREATE PAGE */
+/* CREATE PAGE */
+/* CREATE PAGE */
+
 .form-group {
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 10px;
 }
-
-
 
 .form-group input[type="text"],
 .form-group input[type="file"],
@@ -33,6 +55,7 @@ body {
 
 #create-listing-heading{
     text-align: center;
+    margin-bottom: 20px;
 }
 
 label{
@@ -41,7 +64,7 @@ label{
 
  
 .form-control {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 #create-listing-button{
@@ -52,6 +75,10 @@ label{
     display: block;
 }
 
+.container-create-listing {
+    max-width: 50%;
+    margin: auto;
+}
 /* Index Page */
 /* Index Page */
 /* Index Page */
