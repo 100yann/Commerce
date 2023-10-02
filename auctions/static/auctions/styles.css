@@ -86,7 +86,11 @@ label{
     margin: auto;
 }
 
-
+@media (max-width: 1000px){
+    .container-create-listing{
+        max-width: 75%;
+    }
+}
 /* Index Page (layout)*/
 /* Index Page */
 /* Index Page */
@@ -155,9 +159,31 @@ label{
 }
 
 
+/* VIEW LISTING */
+/* VIEW LISTING */
+/* VIEW LISTING */
+.view-container{
+    margin: auto;
+    width: 80%;
+}
+.view-listing{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
+.listing-column-text{
+    flex-basis: 60%;
+}
 
+.listing-description{
+    margin: 50px 0;
+}
 
+#bid-input {
+    margin-bottom: 50px;
+    max-width: 50%;
+}
 /* Categories */
 /* Categories */
 /* Categories */

@@ -1,8 +1,8 @@
 {% extends 'auctions/layout.html' %}
 
 {% block body %}
-<div class="container">
-    <div class="flex-listing">
+<div class="view-container">
+    <div class="view-listing">
         <div class="listing-column-img">
             {% if details.img %}
                 <img src="{{ details.img }}" alt="listing-photo" height="500px" width="500px">
@@ -10,17 +10,21 @@
         </div>
         <div class="listing-column-text">
             <h1>{{ title.title }}</h1>
-            <p>{{ details.descr }}</p>
-            <h2>${{ bids.highest_bid }}</h2>
+            <h4>Current Price: ${{ bids.highest_bid }}</h4>
+            <div class="listing-description">
+                <h5>Description:</h5>
+                <p>{{ details.descr }}</p>
+            </div>
+
             <p>{{ details.get_category_display }}</p>
 
             {% if user != title.added_by and title.active %}
                 {% if user.username == bids.bidder %}
-                    <p>Yours is the highest bid! {{ bids.num_of_bids }} bid(s) so far.</p>
+                    <h6>Yours is the highest bid! {{ bids.num_of_bids }} bid(s) so far.</h6>
                 {% else %}
-                    <p>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</p>
+                    <h6>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</h6>
                 {% endif %}
-                <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+                <form id='bid-input' action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                     {% csrf_token %}
                     <input type="number" class="form-control" placeholder="Bid" name="new_bid">
                     <input type="submit" name='save-bid' class="btn btn-primary" value="Place Bid">
@@ -38,10 +42,11 @@
                     <p>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</p>
                 {% endif %}
             {% endif %}
-            <p>Posted on {{ details.date_added }}</p>
+
             {% if user != title.added_by %}
-                <p>By {{ title.added_by }}</p>
+                <p>Posted on {{ details.date_added }} by {{ title.added_by }}</p>
             {% else %}
+                <p>Posted on {{ details.date_added }}</p>
                 {% if title.active %}
                     <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
                         {% csrf_token %}
