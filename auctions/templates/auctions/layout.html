@@ -50,26 +50,27 @@
         {% if all_listings %}
             <div class="container">
                 {% for listing, bid in all_listings %}
+                <div class="flex-listing">
                     <a href="{% url 'view' listing_id=listing.listing.id title=listing.listing.title %}">
-                        <div class="listing">
-                            <div class="listing-left">
+                        <div class="div-listing-image">
                             {% if listing.img %}
-                                <img src="{{ listing.img }}" alt="listing_photo">
+                                <img class="listing-image" src="{{ listing.img }}" alt="listing_photo">
                             {% endif %}
-                            </div>
-                            <div class="listing-right">
-                                <h4>{{ listing.listing.title }}</h4>
-                                <h5>Price: ${{ bid.highest_bid }}</h5>
+                        </div>
+                        <div class="listing-text">
+                            <h3>{{ listing.listing.title }}</h3>
+                            <h4>Current Price: ${{ bid.highest_bid }}</h4>
+                            <div id="description">  
                                 <p>{{ listing.descr }}</p>
-
-                                {% if listing.get_category_display != '' %}
-                                    <p>Created on {{ listing.date_added }} |  Category: {{ listing.get_category_display }}</p>
-                                {% else %}
-                                    <p>Created on {{ listing.date_added }}
-                                {% endif %}
                             </div>
+                            {% if listing.get_category_display != '' %}
+                                <p>Created on {{ listing.date_added }} |  Category: {{ listing.get_category_display }}</p>
+                            {% else %}
+                                <p>Created on {{ listing.date_added }}
+                            {% endif %}
                         </div>
                     </a>
+                </div>
                 {% endfor %}
             </div>
         {% endif %}

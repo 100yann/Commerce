@@ -1,23 +1,29 @@
 body {
-    padding: 10px;
+    background-color: #f2f2f2;
 }
 
 
 /* LAYOUT */
 /* LAYOUT */
 /* LAYOUT */
+
 .navbar-brand {
     font-weight:bold;
 }
 .nav {
+    color: white;
+    padding: 10px 10px 0;
+    background-color: #212121;
     display: flex;
     justify-content: space-between;
-    margin: 10px 10px 0;
 }
-
+.nav a:any-link{
+    color: white;
+}
 hr {
     margin: 0 0 25px;
 }
+
 .navbar-left, .navbar-right {
     font-size: 17px;
     display: flex;
@@ -79,61 +85,77 @@ label{
     max-width: 50%;
     margin: auto;
 }
+
+
+/* Index Page (layout)*/
 /* Index Page */
 /* Index Page */
-/* Index Page */
+
 
 .container{
-    max-width: 80%;
+    max-width: 90%;
     margin: auto;
-}
-
-
-.listing {
     display: flex;
     flex-wrap: wrap;
-    border: 1px grey solid;
-    border-radius: 25px;
-    margin: 10px 5px 10px 0;
-    padding: 10px;
 }
 
-.container > a:any-link{
+.flex-listing {
+    background-color: white;
+    flex-basis: 32%;
+    height: 550px;
+    border-radius: 25px;
+    margin: 10px 5px;
+    padding: 12px;
+    overflow: hidden;
+}
+
+#description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    height: 100px;
+    margin-bottom: 5px;
+
+}
+
+#description p {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+@media (max-width: 1300px){
+    .flex-listing{
+        flex-basis: 48%;
+    }
+}
+
+@media (max-width: 860px){
+    .flex-listing{
+        flex-basis: 100%;
+    }
+}
+
+
+.div-listing-image {
+    display: block;
+    width: 100%;
+    height: 60%;
+    margin-bottom: 10px;
+}
+
+.listing-image {
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
+.flex-listing > a:any-link{
     color: black;
 }
-.listing-left{
-    flex-basis: 25%;
-    height: 200px;
-}
 
-.listing-right{
-    flex-basis: 65%;
-}
 
-.listing-left > img {
-    border-radius: 15px;
-    height: 100%;
-    width: 75%;
-    padding: 5px;
-}
 
-.flex-listing{
-    display: flex;
-    flex-wrap: wrap;
-}
-.listing-column-img{
-    margin-top: 0;
-    flex-basis: 20%;
-}
-.listing-column-text{
-    flex-basis: 60%;
-    max-width: 50%;
-    margin-left: 30px;
-}
-.listing-column-text > p {
-    margin-top: 20px;   
-    font-size: 18px;
-}
 
 
 /* Categories */
