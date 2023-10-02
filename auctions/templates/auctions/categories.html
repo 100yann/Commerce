@@ -2,11 +2,11 @@
 {% block body %}
     <div class="bar">
         <div class="item">
-            <a href="">All</a>
+            <a href="{% url 'categories' category='all' %}">All</a>
         </div>
         {% for category in categories %}
             <div class="item">
-                <a href="">{{category.1}}</a>
+                <a href="{% url 'categories' category=category.1%}">{{category.1}}</a>
             </div>
         {% endfor %}
     </div>
