@@ -63,11 +63,14 @@
                             <div id="description">  
                                 <p>{{ listing.descr }}</p>
                             </div>
-                            {% if listing.get_category_display != '' %}
-                                <p>Created on {{ listing.date_added }} |  Category: {{ listing.get_category_display }}</p>
-                            {% else %}
-                                <p>Created on {{ listing.date_added }}
+                            <div id="created-on">
+                                {% if listing.get_category_display != '' %}
+                                    <p>Created on {{ listing.date_added }} |  Category: {{ listing.get_category_display }}</p>
+                                {% else %}
+                                    <p>Created on {{ listing.date_added }}
                             {% endif %}
+
+                            </div>
                         </div>
                     </a>
                 </div>

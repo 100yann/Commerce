@@ -21,6 +21,8 @@
             {% if user != title.added_by and title.active %}
                 {% if user.username == bids.bidder %}
                     <h6>Yours is the highest bid! {{ bids.num_of_bids }} bid(s) so far.</h6>
+                {% elif bids.num_of_bids == 0 %}
+                    <h6>No bids yet.</h6>
                 {% else %}
                     <h6>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</h6>
                 {% endif %}
