@@ -37,8 +37,11 @@ def index(request):
     listings_details = ListingDetails.objects.select_related('listing').all()
     all_bids = Bids.objects.select_related('listing').all()
     all_listings = zip(listings_details, all_bids)
+    listings_won = len(Listing.objects.filter(won_by = request.user.id))
+    print(listings_won)
     return render(request, "auctions/index.html", {
-        'all_listings': all_listings
+        'all_listings': all_listings,
+        'listings_won': listings_won
     })
 
 
@@ -133,7 +136,6 @@ def view_listing(request, listing_id, title):
     get_bid = Bids.objects.get(listing=listing_id)
     current_user = User.objects.get(pk=request.user.id)
     watchlist = current_user in listing.watchlist.all()
-
     if request.method == "POST":
         if request.POST.get('save-bid') and request.POST.get('new_bid') != '':        
             new_bid = int(request.POST.get('new_bid'))
@@ -153,13 +155,17 @@ def view_listing(request, listing_id, title):
             listing.save()
         elif request.POST.get('close'):
             listing.active = False
+            listing_winner = User.objects.get(username=get_bid.bidder)
+            listing.won_by = listing_winner
             listing.save()
-            
+
+    listings_won = len(Listing.objects.filter(won_by = request.user.id))
     context = {
         'title': listing,
         'details': get_listing_details,
         'bids': get_bid,
-        'watchlist': watchlist 
+        'watchlist': watchlist,
+        'listings_won': listings_won
         }
 
     return render(request, "auctions/view_listing.html", context)
@@ -195,5 +201,17 @@ def categories(request, category):
         'categories': categories,
         'all_listings': all_listings,
         'curr_category': curr_category
-
     })
+
+@login_required
+def listings_won(request):
+    listings_won = Listing.objects.filter(won_by=request.user.id)
+    print(listings_won)
+    listing_details = ListingDetails.objects.filter(listing__in=listings_won)
+    bids = Bids.objects.filter(listing__in=listings_won)
+    all_listings = zip(listing_details, bids)
+    context = {
+        'all_listings': all_listings,
+        'listings_won': listings_won
+    }
+    return render(request, 'auctions/listings_won.html', context)

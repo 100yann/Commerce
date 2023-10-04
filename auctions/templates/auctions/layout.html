@@ -24,7 +24,16 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'categories' category='all' %}">Categories</a>
-                </li> 
+                </li>
+                {% if listings_won == 0 %}
+                    <li class="nav-item">
+                        <a style="color: grey" class="nav-link disabled" href="">Listings Won</a>
+                    </li>
+                {% elif listings_won > 0 %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listings_won' %}">Listings Won</a>
+                    </li>
+                {% endif %}
             </div>
             <div class="navbar-right">
                 {% if user.is_authenticated %}

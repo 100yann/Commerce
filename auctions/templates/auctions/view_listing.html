@@ -36,18 +36,18 @@
                         <input type="submit" name='save-watchlist' class="btn btn-primary" value="Remove From Watchlist">
                     {% endif %}
                 </form>
+                <p>Posted on {{ details.date_added }} by {{ title.added_by }}</p>
+
             {% elif not title.active %}
                 <p>Listing Closed.</p>
                 {% if user == title.added_by and bids.num_of_bids == 0 %}
                     <p>The listing was closed with no bids.</p>
                 {% else %}
-                    <p>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</p>
+                    <h2>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</h2>
                 {% endif %}
-            {% endif %}
 
-            {% if user != title.added_by %}
-                <p>Posted on {{ details.date_added }} by {{ title.added_by }}</p>
             {% else %}
+                <h6>{{ bids.num_of_bids }} bid(s) so far.</h6>
                 <p>Posted on {{ details.date_added }}</p>
                 {% if title.active %}
                     <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">

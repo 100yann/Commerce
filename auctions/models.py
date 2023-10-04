@@ -11,6 +11,7 @@ class Listing(models.Model):
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='single_reference')
     watchlist = models.ManyToManyField(User, related_name='multiple_reference', null=True, blank=True)
     active = models.BooleanField(default=True)
+    won_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='won_by', null=True)
 
     def __str__(self):
         watchlist_users = ', '.join([user.username for user in self.watchlist.all()])
