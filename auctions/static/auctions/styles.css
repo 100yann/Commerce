@@ -104,14 +104,14 @@ label{
     flex-wrap: wrap;
 }
 
-.container h2 {
+.container-title {
     text-align: center;
-    margin: auto;
-    margin-bottom: 15px;
+    margin: 5px auto 25px;
 }
+
 .flex-listing {
     background-color: white;
-    flex-basis: 30%;
+    flex-basis: 31%;
     height: 550px;
     margin: 10px 10px;
     overflow: hidden;
@@ -193,26 +193,15 @@ label{
     margin-bottom: 50px;
     max-width: 50%;
 }
+
 /* Categories */
 /* Categories */
 /* Categories */
 
-.bar {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 100%;
-    margin: auto;
-    justify-content:space-between;
-    text-align: center;
+.dropdown-toggle {
+    margin-left: 20px;
 }
-.bar > .item {
-    flex: 1;
-    border: 1px grey solid;
-    font-size: 22px;
-    padding: 10px;
-}
-@media (max-width: 650px){
-    .bar >  .item {
-        font-size: 17px;
-    }
+
+#categories h2 {
+    padding: 0 12px;
 }

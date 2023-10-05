@@ -212,6 +212,6 @@ def listings_won(request):
     all_listings = zip(listing_details, bids)
     context = {
         'all_listings': all_listings,
-        'listings_won': listings_won
+        'listings_won': len(listings_won)
     }
     return render(request, 'auctions/listings_won.html', context)
