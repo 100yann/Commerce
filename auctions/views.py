@@ -16,7 +16,7 @@ from django.conf import settings
 class NewListing(ModelForm):
     class Meta:
         model = Listing
-        exclude = ('added_by', 'active',)
+        exclude = ('added_by', 'active', 'won_by', )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -96,7 +96,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-@login_required
+@login_required(login_url="/login")
 def create_listing(request):
     if request.method == 'POST':
         form1 = NewListing(request.POST)
@@ -123,13 +123,16 @@ def create_listing(request):
             return HttpResponseRedirect(f'view/{listing_instance.id}/{listing_instance.title}')
         else:
             print(form1.errors, form2.errors)
+    listings_won = Listing.objects.filter(won_by=request.user.id)
     return render(request, "auctions/create_listing.html", {
         'form1': NewListing,
-        'form2': NewListingDetails
+        'form2': NewListingDetails,
+        'listings_won': len(listings_won)
+
     })
     
     
-@login_required
+@login_required(login_url="/login")
 def view_listing(request, listing_id, title):
     listing = Listing.objects.get(id=listing_id)
     get_listing_details = ListingDetails.objects.get(listing=listing_id)
@@ -170,18 +173,21 @@ def view_listing(request, listing_id, title):
 
     return render(request, "auctions/view_listing.html", context)
 
-@login_required
+@login_required(login_url="/login")
 def watchlist(request):
     watched_listings = Listing.objects.filter(watchlist=request.user.id)
     listing_details = ListingDetails.objects.filter(listing__in=watched_listings)
     bids = Bids.objects.filter(listing__in=watched_listings)
     all_listings = zip(listing_details, bids)
+    listings_won = Listing.objects.filter(won_by=request.user.id)
     context = {
-        'all_listings': all_listings
+        'all_listings': all_listings,
+        'listings_won': len(listings_won)
+     
     }
     return render(request, 'auctions/watchlist.html', context)
 
-@login_required
+@login_required(login_url="/login")
 def categories(request, category):
     categories = ListingDetails.CATEGORY_CHOICES
     curr_category = 'All'
@@ -196,11 +202,16 @@ def categories(request, category):
         listing_details = ListingDetails.objects.select_related('listing').all()
         all_bids = Bids.objects.select_related('listing').all()
     all_listings = zip(listing_details, all_bids)
+    listings_won = Listing.objects.filter(won_by=request.user.id)
+
+
 
     return render(request, 'auctions/categories.html', {
         'categories': categories,
         'all_listings': all_listings,
-        'curr_category': curr_category
+        'curr_category': curr_category,
+        'listings_won': len(listings_won)
+
     })
 
 @login_required
