@@ -194,6 +194,13 @@ label{
     max-width: 50%;
 }
 
+#listing-comments{
+    margin-top: 25px;
+}
+.comment {
+    max-height: 95px;
+    width: 50%;
+}
 /* Categories */
 /* Categories */
 /* Categories */

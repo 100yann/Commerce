@@ -58,7 +58,31 @@
                     <button class="btn btn-dark" disabled>Listing Closed</button>
                 {% endif %}
             {% endif %}
+
         </div>
     </div>
+    <div id="listing-comments">
+        <h3>Comments</h3>
+        {% if comments %}
+            {% for comment in comments %}
+                <div>
+                    <h6>{{ comment.user }}</h6>
+                    <p>{{ comment.content }}</p>
+                    <p>{{ comment.timestamp }}</p>
+                    
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+        <h3>Add a comment</h3>
+        <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+            {% csrf_token %}
+            <textarea name="new-comment" id="" cols="30" rows="15" class="form-control comment"></textarea>
+            <input type="submit" value="Add Comment" name="comment">
+        </form>
+    </div>
+
+
 </div>
 {% endblock %}

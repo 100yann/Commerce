@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User, Listing, ListingDetails, Bids
+from .models import User, Listing, ListingDetails, Bids, Comments
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.decorators import login_required
@@ -30,6 +30,7 @@ class NewListingDetails(ModelForm):
             'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
             'img': forms.URLInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
+            'comments': forms.Textarea(attrs={'class': 'form-control comment'})
         }
 
 
@@ -38,7 +39,6 @@ def index(request):
     all_bids = Bids.objects.select_related('listing').all()
     all_listings = zip(listings_details, all_bids)
     listings_won = len(Listing.objects.filter(won_by = request.user.id))
-    print(listings_won)
     return render(request, "auctions/index.html", {
         'all_listings': all_listings,
         'listings_won': listings_won
@@ -161,14 +161,23 @@ def view_listing(request, listing_id, title):
             listing_winner = User.objects.get(username=get_bid.bidder)
             listing.won_by = listing_winner
             listing.save()
-
+        elif request.POST.get('comment'):
+            comment = request.POST['new-comment']
+            if comment != '':
+                new_comment = Comments.objects.create(listing=listing, 
+                                                    user=current_user,
+                                                    content=comment)
+                new_comment.save()
+    all_comments = Comments.objects.filter(listing=listing).order_by('-timestamp')
     listings_won = len(Listing.objects.filter(won_by = request.user.id))
     context = {
         'title': listing,
         'details': get_listing_details,
         'bids': get_bid,
         'watchlist': watchlist,
-        'listings_won': listings_won
+        'listings_won': listings_won,
+        'comments_form': NewListingDetails,
+        'comments': all_comments
         }
 
     return render(request, "auctions/view_listing.html", context)
@@ -204,8 +213,6 @@ def categories(request, category):
     all_listings = zip(listing_details, all_bids)
     listings_won = Listing.objects.filter(won_by=request.user.id)
 
-
-
     return render(request, 'auctions/categories.html', {
         'categories': categories,
         'all_listings': all_listings,
@@ -217,7 +224,6 @@ def categories(request, category):
 @login_required
 def listings_won(request):
     listings_won = Listing.objects.filter(won_by=request.user.id)
-    print(listings_won)
     listing_details = ListingDetails.objects.filter(listing__in=listings_won)
     bids = Bids.objects.filter(listing__in=listings_won)
     all_listings = zip(listing_details, bids)

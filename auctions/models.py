@@ -31,11 +31,10 @@ class ListingDetails(models.Model):
 
     descr = models.CharField(max_length=1000)
     starting_bid = models.PositiveIntegerField()
-    img = models.URLField(blank=True)
+    img = models.URLField(blank=True, max_length=1000)
     category = models.CharField(max_length=50, blank=True, choices=CATEGORY_CHOICES)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    date_added = models.DateField(blank=True)   
-
+    date_added = models.DateField(blank=True)
 
     def __str__(self):
         return f'{self.listing},{self.descr}, {self.starting_bid}, {self.img}, {self.category}'
@@ -54,3 +53,13 @@ class Bids(models.Model):
 
     def __str__(self):
         return f'{self.listing}, {self.bidder}, {self.highest_bid}, {self.num_of_bids}'
+    
+
+class Comments(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.listing}, {self.user}, {self.content}, {self.timestamp}'
