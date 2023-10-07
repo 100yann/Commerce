@@ -120,7 +120,7 @@ def create_listing(request):
             bid_instance.num_of_bids = 0
             bid_instance.save()
             
-            return HttpResponseRedirect(f'view/{listing_instance.id}/{listing_instance.title}')
+            return HttpResponseRedirect(f'view/{listing_instance.id}')
         else:
             print(form1.errors, form2.errors)
     listings_won = Listing.objects.filter(won_by=request.user.id)
@@ -133,7 +133,7 @@ def create_listing(request):
     
     
 @login_required(login_url="/login")
-def view_listing(request, listing_id, title):
+def view_listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     get_listing_details = ListingDetails.objects.get(listing=listing_id)
     get_bid = Bids.objects.get(listing=listing_id)
@@ -168,6 +168,7 @@ def view_listing(request, listing_id, title):
                                                     user=current_user,
                                                     content=comment)
                 new_comment.save()
+
     all_comments = Comments.objects.filter(listing=listing).order_by('-timestamp')
     listings_won = len(Listing.objects.filter(won_by = request.user.id))
     context = {

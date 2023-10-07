@@ -60,7 +60,7 @@
             <div class="container">
                 {% for listing, bid in all_listings %}
                 <div class="flex-listing">
-                    <a href="{% url 'view' listing_id=listing.listing.id title=listing.listing.title %}">
+                    <a href="{% url 'view' listing_id=listing.listing.id %}">
                         <div class="div-listing-image">
                             {% if listing.img %}
                                 <img class="listing-image" src="{{ listing.img }}" alt="listing_photo">

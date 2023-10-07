@@ -40,7 +40,7 @@
                     {% else %}
                         <h6>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</h6>
                     {% endif %}
-                    <form id='bid-input' action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+                    <form id='bid-input' action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                         {% csrf_token %}
                         <input type="number" class="form-control" placeholder="Bid" name="new_bid">
                         <input type="submit" name='save-bid' class="btn btn-primary" value="Place Bid">
@@ -55,7 +55,7 @@
                 {% endif %}
             </div>
             {% if title.active %}
-                <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+                <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                     {% csrf_token %}
                 </form>
             {% elif not title.active %}
@@ -89,7 +89,7 @@
         </div>
         <div class="show-comments">
             <h4>Add a comment</h4>
-            <form action="{% url 'view' listing_id=details.listing.id title=title %}" method="POST">
+            <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                 {% csrf_token %}
                 <textarea name="new-comment" id="" cols="30" rows="15" class="form-control comment"></textarea>
                 <input type="submit" value="Add Comment" name="comment" class="btn btn-dark">
