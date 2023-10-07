@@ -50,17 +50,24 @@
                         {% else %}
                             <input type="submit" name='save-watchlist' class="btn btn-primary" value="Remove From Watchlist">
                         {% endif %}
+                    </form>
+                {% else %}
+                    {% if title.active %}
+                    <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {% if bids.num_of_bids == 0 %}
+                            <h6>No bids yet.</h6>
+                        {% else %}
+                            <h6>{{bids.num_of_bids}} bid(s) so far.</h6>
+                        {% endif %}
                         <input type="submit" name="close" class="btn btn-primary" value="Close Listing">
                     </form>
+                    {% elif not title.active %}
+                        <button class="btn btn-dark" disabled>Listing Closed</button>
+                    {% endif %}
                 {% endif %}
             </div>
-            {% if title.active %}
-                <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
-                    {% csrf_token %}
-                </form>
-            {% elif not title.active %}
-                <button class="btn btn-dark" disabled>Listing Closed</button>
-            {% endif %}
+
 
 
         </div>
