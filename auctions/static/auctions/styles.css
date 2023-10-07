@@ -2,7 +2,10 @@ body {
     background-color: #edf2fb;
 }
 
-
+ul {
+    list-style: none;
+    padding: 0px;
+}
 /* LAYOUT */
 /* LAYOUT */
 /* LAYOUT */
@@ -171,22 +174,65 @@ label{
 /* VIEW LISTING */
 /* VIEW LISTING */
 /* VIEW LISTING */
+
 .view-container{
     margin: auto;
-    width: 80%;
+    width: 70%;
 }
 .view-listing{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    max-height: 500px;
     justify-content: space-between;
 }
-
+.listing-column-img {
+    max-height: 100%;
+    flex-basis: 32%;
+}
 .listing-column-text{
+    background-color: white;
+    padding: 20px;
+    border-radius: 25px;
+    max-height: 500px;
+    margin: 0 0 0 10px;
     flex-basis: 60%;
+    justify-content: space-around;
+}
+
+
+@media(max-width: 1240px) {
+    .view-listing{
+        display: inline;
+        max-height: auto;
+    }
+    .listing-column-img{
+        margin: auto;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .listing-column-text{
+        margin: 0;
+    }
+}
+.listing-column-text h1{
+    width: 70%;
+    margin-bottom: 20px;
+}
+.listing-column-text h4 {
+    margin-bottom: 40px;
 }
 
 .listing-description{
-    margin: 50px 0;
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+#bidding-field {
+    position: relative;
+    bottom: 0;
 }
 
 #bid-input {
@@ -194,7 +240,10 @@ label{
     max-width: 50%;
 }
 
-#listing-comments{
+.show-comments{
+    background-color: white;
+    padding: 20px;
+    border-radius: 25px;
     margin-top: 25px;
 }
 .comment {
