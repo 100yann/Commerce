@@ -199,6 +199,9 @@ label{
     justify-content: space-around;
 }
 
+#details {
+    margin-bottom: 30px;
+}
 
 @media(max-width: 1320px) {
     .view-listing{
@@ -214,12 +217,8 @@ label{
         margin: 0;
     }
 }
-.listing-column-text h1{
-    width: 70%;
-    margin-bottom: 20px;
-}
-.listing-column-text h4 {
-    margin-bottom: 40px;
+.listing-column-text h4{
+    margin-bottom: 30px;
 }
 
 .listing-description{
@@ -231,8 +230,12 @@ label{
 }
 
 
-#bid-input {
+#bid {
     margin-bottom: 50px;
+}
+
+.bid-field{
+    max-width: 70%;
 }
 
 .show-comments{

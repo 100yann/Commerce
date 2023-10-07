@@ -19,18 +19,21 @@
                     <h4>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</h4>
                 {% endif %}
             {% endif %}
-            <h5>Details:</h5>
-            <ul>
-                <li>Starting Bid: ${{ details.starting_bid }}</li>
-                <li>Category: {{ details.get_category_display }}</li>
-                <li>Created On: {{ details.date_added }}</li>
-                <li>Created By: {{ title.added_by }}</li>
-                {% if not title.active %}
-                    <li>Status: Closed</li>
-                {% else %}
-                    <li>Status: Active</li>
-                {% endif %}
-            </ul>
+            <div id="details">
+                <h5>Details:</h5>
+                <ul>
+                    <li>Starting Bid: ${{ details.starting_bid }}</li>
+                    <li>Category: {{ details.get_category_display }}</li>
+                    <li>Created On: {{ details.date_added }}</li>
+                    <li>Created By: {{ title.added_by }}</li>
+                    {% if not title.active %}
+                        <li>Status: Closed</li>
+                    {% else %}
+                        <li>Status: Active</li>
+                    {% endif %}
+                </ul>
+            </div>
+
             <div id="bidding-field">
                 {% if user != title.added_by and title.active %}
                     {% if user.username == bids.bidder %}
@@ -40,9 +43,9 @@
                     {% else %}
                         <h6>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</h6>
                     {% endif %}
-                    <form id='bid-input' action="{% url 'view' listing_id=details.listing.id %}" method="POST">
+                    <form id='bid' action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                         {% csrf_token %}
-                        <input type="number" class="form-control" placeholder="Bid" name="new_bid">
+                        <input type="number" class="form-control bid-field" placeholder="Bid" name="new_bid">
                         <input type="submit" name='save-bid' class="btn btn-primary" value="Place Bid">
                         
                         {% if not watchlist %}
