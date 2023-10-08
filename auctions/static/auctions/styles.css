@@ -138,7 +138,7 @@ label{
     font-size: 13px;
 }
 
-@media (max-width: 1460px){
+@media (max-width: 1260px){
     .container{
         justify-content: space-evenly;
     }
@@ -257,7 +257,13 @@ label{
     background-color: white;
     padding: 20px;
     border-radius: 25px;
-    margin-top: 25px;
+    margin-top: 15px;
+}
+.add-comment {
+    margin-bottom: 20px;
+}
+.comment-date {
+    font-size: 13px;
 }
 .comment {
     max-height: 95px;

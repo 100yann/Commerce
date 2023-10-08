@@ -132,13 +132,17 @@ def create_listing(request):
     })
     
     
-@login_required(login_url="/login")
+
 def view_listing(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     get_listing_details = ListingDetails.objects.get(listing=listing_id)
     get_bid = Bids.objects.get(listing=listing_id)
-    current_user = User.objects.get(pk=request.user.id)
-    watchlist = current_user in listing.watchlist.all()
+    error = ''
+    if request.user.id:
+        current_user = User.objects.get(pk=request.user.id)
+        watchlist = current_user in listing.watchlist.all()
+    else:
+        watchlist = ''
     if request.method == "POST":
         if request.POST.get('save-bid') and request.POST.get('new_bid') != '':        
             new_bid = int(request.POST.get('new_bid'))
@@ -148,6 +152,8 @@ def view_listing(request, listing_id):
                 user = request.user.username
                 get_bid.bidder = user
                 get_bid.save()
+            else:
+                error = 'Bid should be larger than the current one.'
         elif request.POST.get('save-watchlist'):
             if watchlist == True:
                 listing.watchlist.remove(current_user)
@@ -178,7 +184,8 @@ def view_listing(request, listing_id):
         'watchlist': watchlist,
         'listings_won': listings_won,
         'comments_form': NewListingDetails,
-        'comments': all_comments
+        'comments': all_comments,
+        'error': error
         }
 
     return render(request, "auctions/view_listing.html", context)

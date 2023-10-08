@@ -16,7 +16,7 @@
                 {% if user == title.added_by and bids.num_of_bids == 0 %}
                     <h4>The listing was closed with no bids.</h4>
                 {% else %}
-                    {% if user == title.won_by}
+                    {% if user == title.won_by %}
                         <h4>You won the listing with a bid of ${{ bids.highest_bid }}.</h4>
                     {% else %}
                         <h4>{{ title.won_by }} won the listing with a bid of ${{ bids.highest_bid }}.</h4>
@@ -39,13 +39,17 @@
             </div>
 
             <div id="bidding-field">
-                {% if user != title.added_by and title.active %}
+                {% if user != title.added_by and title.active and user.is_authenticated %}
                     {% if user.username == bids.bidder %}
                         <h6>Yours is the highest bid! {{ bids.num_of_bids }} bid(s) so far.</h6>
                     {% elif bids.num_of_bids == 0 %}
                         <h6>No bids yet.</h6>
                     {% else %}
                         <h6>Someone else has bid on this item. {{ bids.num_of_bids }} bid(s) so far.</h6>
+                    {% endif %}
+
+                    {% if error %}
+                        <div style="color: red;">{{ error }}</div>
                     {% endif %}
                     <form id='bid' action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                         {% csrf_token %}
@@ -58,7 +62,9 @@
                             <input type="submit" name='save-watchlist' class="btn btn-primary" value="Remove From Watchlist">
                         {% endif %}
                     </form>
-                {% else %}
+                
+                {% elif user == title.added_by %}
+
                     {% if title.active %}
                     <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
                         {% csrf_token %}
@@ -69,9 +75,14 @@
                         {% endif %}
                         <input type="submit" name="close" class="btn btn-primary" value="Close Listing">
                     </form>
+
                     {% elif not title.active %}
                         <button class="btn btn-dark" disabled>Listing Closed</button>
+
                     {% endif %}
+
+                {% elif not user.is_authenticated %}
+                    <h5>Login to bid.</h5>
                 {% endif %}
             </div>
 
@@ -93,7 +104,7 @@
                         <ul>
                         <li><h6>{{ comment.user }}</h6></li>
                         <li>{{ comment.content }}</li> 
-                        <li>{{ comment.timestamp }}</li> 
+                        <li class="comment-date">{{ comment.timestamp }}</li> 
                         </ul>  
                     </div>
                 {% endfor %}
@@ -101,13 +112,17 @@
                 <p>No comments yet.</p>
             {% endif %}
         </div>
-        <div class="show-comments">
-            <h4>Add a comment</h4>
-            <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
-                {% csrf_token %}
-                <textarea name="new-comment" id="" cols="30" rows="15" class="form-control comment"></textarea>
-                <input type="submit" value="Add Comment" name="comment" class="btn btn-dark">
-            </form>
+        <div class="show-comments add-comment">
+            {% if user.is_authenticated %}
+                <h4>Add a comment</h4>
+                <form action="{% url 'view' listing_id=details.listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <textarea name="new-comment" id="" cols="30" rows="15" class="form-control comment"></textarea>
+                    <input type="submit" value="Add Comment" name="comment" class="btn btn-dark">
+                </form>
+            {% else %}
+                <h5>Login to comment</h5>
+            {% endif %}
         </div> 
     </div>
 
