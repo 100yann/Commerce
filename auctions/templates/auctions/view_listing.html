@@ -16,7 +16,11 @@
                 {% if user == title.added_by and bids.num_of_bids == 0 %}
                     <h4>The listing was closed with no bids.</h4>
                 {% else %}
-                    <h4>The listing was won by {{ bids.bidder }} with a bid of ${{ bids.highest_bid }}.</h4>
+                    {% if user == title.won_by}
+                        <h4>You won the listing with a bid of ${{ bids.highest_bid }}.</h4>
+                    {% else %}
+                        <h4>{{ title.won_by }} won the listing with a bid of ${{ bids.highest_bid }}.</h4>
+                    {% endif %}
                 {% endif %}
             {% endif %}
             <div id="details">
