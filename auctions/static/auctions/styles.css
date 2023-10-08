@@ -135,7 +135,9 @@ label{
 
 #created-on {
     color: #777B7E;
+    font-size: 13px;
 }
+
 @media (max-width: 1460px){
     .container{
         justify-content: space-evenly;
