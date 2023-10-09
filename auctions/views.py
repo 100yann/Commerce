@@ -35,8 +35,9 @@ class NewListingDetails(ModelForm):
 
 
 def index(request):
-    listings_details = ListingDetails.objects.select_related('listing').all()
-    all_bids = Bids.objects.select_related('listing').all()
+    active_listings = Listing.objects.filter(active=True)
+    listings_details = ListingDetails.objects.filter(listing__in=active_listings)
+    all_bids = Bids.objects.filter(listing__in=active_listings)
     all_listings = zip(listings_details, all_bids)
     listings_won = len(Listing.objects.filter(won_by = request.user.id))
     return render(request, "auctions/index.html", {
@@ -240,3 +241,16 @@ def listings_won(request):
         'listings_won': len(listings_won)
     }
     return render(request, 'auctions/listings_won.html', context)
+
+def closed_listings(request):
+    closed_listings = Listing.objects.filter(active=False)
+    listing_details = ListingDetails.objects.filter(listing__in=closed_listings)
+    bids = Bids.objects.filter(listing__in=closed_listings)
+    all_listings = zip(listing_details, bids)
+    listings_won = Listing.objects.filter(won_by=request.user.id)
+
+    context = {
+        'all_listings': all_listings,
+        'listings_won': len(listings_won)
+    }
+    return render(request, 'auctions/closed_listings.html', context)

@@ -20,9 +20,31 @@
 
             <div class="collapse navbar-collapse" id="navbarHamburger">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-                    </li>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            View Listings
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'closed_listings' %}">Closed Listings</a>
+                            </li>
+                            {% if listings_won > 0 and user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'listings_won' %}">Listings Won</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" href="">Listings Won</a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'create' %}">Add Listing</a>
                     </li>
@@ -32,16 +54,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'categories' category='all' %}">Categories</a>
                     </li>
-                    {% if listings_won > 0 and user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'listings_won' %}">Listings Won</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="">Listings Won</a>
-                        </li>
-                    {% endif %}
                 </ul>
+
                 <ul class="navbar-nav mr-right mt-2 mt-lg-0">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -66,7 +80,7 @@
         {% endblock %}
         {% if all_listings %}
             <div class="container">
-                {% for listing, bid in all_listings %}
+                {% for listing, bid in all_listings %}   
                 <div class="flex-listing">
                     <a href="{% url 'view' listing_id=listing.listing.id %}">
                         <div class="div-listing-image">
@@ -76,7 +90,11 @@
                         </div>
                         <div class="listing-text">
                             <h3>{{ listing.listing.title }}</h3>
-                            <h4>Current Price: ${{ bid.highest_bid }}</h4>
+                            {% if listing.is_active %}
+                                <h4>Current Price: ${{ bid.highest_bid }}</h4> 
+                            {% else %}
+                                <h4>Won for: ${{ bid.highest_bid }}</h4>
+                            {% endif %}
                             <div id="description">  
                                 <p>{{ listing.descr }}</p>
                             </div>

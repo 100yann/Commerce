@@ -43,6 +43,9 @@ class ListingDetails(models.Model):
     def save(self, *args, **kwargs):
         self.date_added = timezone.now()
         return super(ListingDetails, self).save(*args, **kwargs)
+    
+    def is_active(self):
+        return self.listing.active
 
 
 class Bids(models.Model):
